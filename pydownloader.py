@@ -20,6 +20,7 @@ class Downloader(QDialog):
         # Modify widgets properties
         url.setPlaceholderText("URL")
         save_location.setPlaceholderText("File save location")
+        progress.setValue(0)                                # Set progress bar to 0%
 
         # Add objects to layout
         layout.addWidget(url)
@@ -27,6 +28,7 @@ class Downloader(QDialog):
         layout.addWidget(progress)
         layout.addWidget(download)
 
+        # Set layout behavior
         self.setLayout(layout)
         self.setWindowTitle("PyDownloader")                 # Main window title
         self.setFocus()                                     # Removes focus from QLineEdit()
