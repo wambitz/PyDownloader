@@ -21,6 +21,7 @@ class Downloader(QDialog):
         url.setPlaceholderText("URL")
         save_location.setPlaceholderText("File save location")
         progress.setValue(0)                                # Set progress bar to 0%
+        progress.setAlignment(Qt.AlignHCenter)              # Puts the % value in the middle of the bar
 
         # Add objects to layout
         layout.addWidget(url)
