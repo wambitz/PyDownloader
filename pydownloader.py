@@ -18,7 +18,7 @@ class Downloader(QDialog):
         self.save_location = QLineEdit()
         progress = QProgressBar()
         download = QPushButton("Download")
-        browse = QPushButton.("Browse")
+        browse = QPushButton("Browse")
 
         # Modify widgets properties
         self.url.setPlaceholderText("URL")
@@ -29,8 +29,10 @@ class Downloader(QDialog):
         # Add objects to layout
         layout.addWidget(self.url)
         layout.addWidget(self.save_location)
+        layout.addWidget(browse)
         layout.addWidget(progress)
         layout.addWidget(download)
+
 
         # Set layout behavior
         self.setLayout(layout)
