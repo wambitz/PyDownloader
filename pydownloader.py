@@ -16,21 +16,21 @@ class Downloader(QDialog):
         # Objects within layout
         self.url = QLineEdit()
         self.save_location = QLineEdit()
-        progress = QProgressBar()
+        self.progress = QProgressBar()
         download = QPushButton("Download")
         browse = QPushButton("Browse")
 
         # Modify widgets properties
         self.url.setPlaceholderText("URL")
         self.save_location.setPlaceholderText("File save location")
-        progress.setValue(0)                                # Set progress bar to 0%
-        progress.setAlignment(Qt.AlignHCenter)              # Puts the % value in the middle of the bar
+        self.progress.setValue(0)                                # Set progress bar to 0%
+        self.progress.setAlignment(Qt.AlignHCenter)              # Puts the % value in the middle of the bar
 
         # Add objects to layout
         layout.addWidget(self.url)
         layout.addWidget(self.save_location)
         layout.addWidget(browse)
-        layout.addWidget(progress)
+        layout.addWidget(self.progress)
         layout.addWidget(download)
 
 
@@ -44,8 +44,9 @@ class Downloader(QDialog):
         browse.clicked.connect(self.browse_file)
         
     def browse_file(self):
-        save_file = QFileDialog.getSaveFileName(self, caption="Savefile As..",
+        save_file = QFileDialog.getSaveFileName(self, caption="Save file As..",
                                                 directory=".", filter="All Files (*.*)")
+        self.save_location.setText(QDir.toNativeSeparators(save_file))                                                
         
     # Download functionality
     def download(self):
@@ -59,7 +60,8 @@ class Downloader(QDialog):
         
         # After download status information and return to widget default values
         QMessageBox.information(self, "Information", "The download is complete")
-        self.progress.setValue(0)        
+        self.progress.setValue(0)       
+        self.url.setText("") 
         self.save_location.setText("")
         
     def report(self, block_num, block_size, total_size):
