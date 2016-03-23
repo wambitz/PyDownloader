@@ -2,6 +2,8 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import sys
 
+import urllib.request
+
 
 class Downloader(QDialog):
     # Constructor
@@ -12,20 +14,20 @@ class Downloader(QDialog):
         layout = QVBoxLayout()
 
         # Objects within layout
-        url = QLineEdit()
-        save_location = QLineEdit()
+        self.url = QLineEdit()
+        self.save_location = QLineEdit()
         progress = QProgressBar()
         download = QPushButton("Download")
 
         # Modify widgets properties
-        url.setPlaceholderText("URL")
-        save_location.setPlaceholderText("File save location")
+        self.url.setPlaceholderText("URL")
+        self.save_location.setPlaceholderText("File save location")
         progress.setValue(0)                                # Set progress bar to 0%
         progress.setAlignment(Qt.AlignHCenter)              # Puts the % value in the middle of the bar
 
         # Add objects to layout
-        layout.addWidget(url)
-        layout.addWidget(save_location)
+        layout.addWidget(self.url)
+        layout.addWidget(self.save_location)
         layout.addWidget(progress)
         layout.addWidget(download)
 
@@ -33,8 +35,31 @@ class Downloader(QDialog):
         self.setLayout(layout)
         self.setWindowTitle("PyDownloader")                 # Main window title
         self.setFocus()                                     # Removes focus from QLineEdit()
-
-
+        
+        # Event and event handler as parameter
+        download.clicked.connect(self.download)
+        
+    # Download functionality
+    def download(self):
+        url = self.url.text()                               # save url in variable
+        save_location = self.save_location.text()           # local machine path
+        try: 
+            urllib.request.urlretrieve(url, save_location, self.report)
+        except Exception:
+            QMessageBox.warning(self, "Warning", "The download failed")
+            return
+        
+        # After download status information and return to widget default values
+        QMessageBox.information(self, "Information", "The download is complete")
+        self.progress.setValue(0)        
+        self.save_location.setText("")
+        
+    def report(self, block_num, block_size, total_size):
+        read_so_far = block_num * block_size
+        if total_size > 0:
+            percent = read_so_far * 100 / total_size
+            self.progress.setValue(int(percent))
+            
 # Call main window
 app = QApplication(sys.argv)
 dialog = Downloader()
